@@ -1,6 +1,9 @@
 # Applying MVC model in React Native
 
-Link youtube video: 
+Link youtube video:
+- Part 1: Creating model https://www.youtube.com/watch?v=SJGSncl2cQY
+- Part 2: Creating controller https://www.youtube.com/watch?v=Alel1SG72pY
+- Part 3: Creating view https://www.youtube.com/watch?v=8ailcT_ISrQ
 
 ********STEPS********
 
