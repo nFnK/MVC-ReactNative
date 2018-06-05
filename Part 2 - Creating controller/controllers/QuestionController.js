@@ -1,7 +1,7 @@
-import { observable, action } from 'mobx';
 import Question from 'MVCDemo/models/Question.js';
+import { observable, action } from 'mobx';
 
-export default class QuestionController {
+class QuestionController {
 	@observable lstQuestion = [];
 
 	@action setListQuestion(lstQuestion) {
@@ -9,11 +9,16 @@ export default class QuestionController {
 			this.lstQuestion = lstQuestion;
 	}
 
+	// get question by quesID
 	@action getQuestion(quesID) {
-		var question = lstQuestion.find(q => q.quesID == quesID);
+		var question = this.lstQuestion.find(q => q.quesID == quesID);
 		if(question != null)
 			return question;
 
 		return new Question();
 	}
 }
+
+const questionController = new QuestionController();
+
+export default questionController;

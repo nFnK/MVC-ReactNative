@@ -11,6 +11,7 @@
   Text,
   View,
   ToastAndroid,
+  ActivityIndicator
 } from 'react-native';
 import Question from './models/Question.js';
 import QuestionController from './controllers/QuestionController.js';
@@ -26,6 +27,10 @@ export default class App extends Component<Props> {
     this.question.answerB = "badminton";
     this.question.answerC = "swimming";
     this.question.answerD = "esport";
+
+    this.state = {
+      isLoading: true,
+    };
   }
 
   componentDidMount() {
@@ -35,9 +40,11 @@ export default class App extends Component<Props> {
             var questionData = responseJson.QUESTION;
 
             if(questionData != null) {
-              var lstQuestion = [];
-              for (var i = 0; i < questionData.length; i++) {
+              var length = questionData.length;
+              var lstQuestion = []; // store all questions
+              for(var i = 0; i < length; i++) {
                 var item = questionData[i];
+
                 var question = new Question();
                 question.quesID = item.QuesID;
                 question.quesContent = item.QuesContent;
@@ -51,22 +58,32 @@ export default class App extends Component<Props> {
               }
 
               QuestionController.setListQuestion(lstQuestion);
+              this.question = QuestionController.getQuestion(2);
+              this.setState({isLoading: false});
             }
           })
           .catch((error) => {
             ToastAndroid.show(error.toString(), ToastAndroid.SHORT);
-          })
+          });
   }
 
   render() { 
+    if(this.state.isLoading) {
+      return (
+        <View style={styles.container}>
+          <Text>Loading data</Text>
+          <ActivityIndicator/>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
-        
-        <Text>Sentence {QuestionController.lstQuestion[0].quesID}: {QuestionController.lstQuestion[0].quesContent}</Text>
-        <Text>{QuestionController.lstQuestion[0].answerA}</Text>
-        <Text>{QuestionController.lstQuestion[0].answerB}</Text>
-        <Text>{QuestionController.lstQuestion[0].answerC}</Text>
-        <Text>{QuestionController.lstQuestion[0].answerD}</Text>
+        <Text style={styles.text}>Sentence {this.question.quesID}: {this.question.quesContent}</Text>
+        <Text style={styles.text}>{this.question.answerA}</Text>
+        <Text style={styles.text}>{this.question.answerB}</Text>
+        <Text style={styles.text}>{this.question.answerC}</Text>
+        <Text style={styles.text}>{this.question.answerD}</Text>
       </View>
       );  
 
@@ -79,5 +96,8 @@ export default class App extends Component<Props> {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#F5FCFF',
+    },
+    text: {
+      fontSize: 20,
     },
   });
